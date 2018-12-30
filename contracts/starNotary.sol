@@ -4,13 +4,13 @@ import 'openzeppelin-solidity/contracts/token/ERC721/ERC721.sol';
 
 contract StarNotary is ERC721 {
 
+    string public constant name = "Tobis Notray Star Token";
+    string public constant symbol = "TNST";
+    uint8 public constant decimals = 18;
+
     struct Star {
         string name;
     }
-
-//  Add a name and a symbol for your starNotary tokens
-
-//
 
     mapping(uint256 => Star) public tokenIdToStarInfo;
     mapping(uint256 => uint256) public starsForSale;
@@ -23,9 +23,10 @@ contract StarNotary is ERC721 {
         _mint(msg.sender, _tokenId);
     }
 
-// Add a function lookUptokenIdToStarInfo, that looks up the stars using the Token ID, and then returns the name of the star.
-
-//
+    function lookUptokenIdToStarInfo(uint256 _tokenId) public view returns (string _name){
+        Star memory star = tokenIdToStarInfo[_tokenId];
+        _name = star.name;
+    }
 
     function putStarUpForSale(uint256 _tokenId, uint256 _price) public {
         require(ownerOf(_tokenId) == msg.sender);
