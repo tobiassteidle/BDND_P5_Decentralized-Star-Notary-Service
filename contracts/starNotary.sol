@@ -6,12 +6,13 @@ contract StarNotary is ERC721 {
 
     string public constant name = "Tobis Notray Star Token";
     string public constant symbol = "TNST";
-    uint8 public constant decimals = 18;
+    uint8 public constant decimals = 3; // for better visibility in MetaMask
 
     struct Star {
         string name;
     }
 
+    uint256[] tokenIds;
     mapping(uint256 => Star) public tokenIdToStarInfo;
     mapping(uint256 => uint256) public starsForSale;
 
@@ -19,13 +20,20 @@ contract StarNotary is ERC721 {
         Star memory newStar = Star(_name);
 
         tokenIdToStarInfo[_tokenId] = newStar;
+        tokenIds.push(_tokenId);
 
         _mint(msg.sender, _tokenId);
     }
 
-    function lookUptokenIdToStarInfo(uint256 _tokenId) public view returns (string _name){
+    function lookUptokenIdToStarInfo(uint256 _tokenId) public view returns (string _name, address _owner, bool _forsale){
         Star memory star = tokenIdToStarInfo[_tokenId];
         _name = star.name;
+        _owner = _tokenOwner[_tokenId];
+        _forsale = starsForSale[_tokenId] != 0;
+    }
+
+    function lookUpStarInfoTokens() public view returns (uint256[] _tokenIds) {
+        _tokenIds = tokenIds;
     }
 
     function putStarUpForSale(uint256 _tokenId, uint256 _price) public {
@@ -52,13 +60,28 @@ contract StarNotary is ERC721 {
         starsForSale[_tokenId] = 0;
       }
 
-// Add a function called exchangeStars, so 2 users can exchange their star tokens...
-//Do not worry about the price, just write code to exchange stars between users.
+    function transferStar(uint256 _tokenId, address _to) public {
+        require(ownerOf(_tokenId) == msg.sender);
 
-//
+        address starOwner = ownerOf(_tokenId);
+        _removeTokenFrom(starOwner, _tokenId);
+        _addTokenTo(_to, _tokenId);
+    }
 
-// Write a function to Transfer a Star. The function should transfer a star from the address of the caller.
-// The function should accept 2 arguments, the address to transfer the star to, and the token ID of the star.
-//
+    function exchangeStars(uint256 _tokenId, uint256 _exchangeTokenId) public {
+        // Sender must be owner of token to exchange
+        require(ownerOf(_exchangeTokenId) == msg.sender);
 
+        // token must be available for sale
+        require(starsForSale[_tokenId] > 0);
+
+        // transfer exchange token to token owner
+        _removeTokenFrom(msg.sender, _exchangeTokenId);
+        _addTokenTo(ownerOf(_tokenId), _exchangeTokenId);
+
+        // transfer token to sender
+        _removeTokenFrom(ownerOf(_tokenId), _tokenId);
+        _addTokenTo(msg.sender, _tokenId);
+        starsForSale[_tokenId] = 0;
+    }
 }

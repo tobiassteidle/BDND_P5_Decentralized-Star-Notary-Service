@@ -23,11 +23,96 @@ const createStar = async () => {
   const id = document.getElementById("starId").value;
   await instance.createStar(name, id, {from: account});
   App.setStatus("New Star Owner is " + account + ".");
+  App.starTokenModified();
 };
 
-// Add a function lookUp to Lookup a star by ID using tokenIdToStarInfo()
+const lookUptokenIdToStarInfo = async () => {
+  const instance = await StarNotary.deployed();
+  const id = document.getElementById("lookupStarId").value;
+  const result = await instance.lookUptokenIdToStarInfo(id);
+  const text = document.getElementById('lookupStarName');
+  text.value = result[0];
+};
 
-//
+const starTokenModified = async () => {
+  let template = $('#hidden-card-template').html();
+  $('#cardcontainer').empty();
+
+  const instance = await StarNotary.deployed();
+  const tokenIds = await instance.lookUpStarInfoTokens();
+  tokenIds.forEach(async function(id){
+    const result = await instance.lookUptokenIdToStarInfo(id);
+    const name = result[0];
+    const owner = result[1];
+    const isForSale = !result[2] && owner === account;
+    const isBuyable = result[2] && owner !== account;
+
+
+    const card = $(template).clone();
+
+    const elementStarName = $(card).find('.cardstarname');
+    const elementTokenId = $(card).find('.cardtokenid');
+    const elementStarOwner = $(card).find('.cardstarowner');
+    const elementBtnForSale = $(card).find('.cardbtnforsale');
+    const elementBtnBuyable = $(card).find('.cardbtnbuy');
+
+    const elementTransfer = $(card).find('.cardtransfer');
+    const elementBtnTransfer = $(card).find('.cardbtntransfer');
+
+    const elementExchange = $(card).find('.cardexchange');
+    const elementBtnExchange = $(card).find('.cardbtnexchange');
+
+    elementStarName.html(name);
+    elementTokenId.html('Token Id: ' + id);
+
+    if(owner === account) {
+      elementStarOwner.html('Owner: Yes, its mine.');
+    } else {
+      elementStarOwner.html('Owner: ' + owner);
+    }
+
+    elementBtnForSale.attr('onclick', 'App.putStarUpForSale(' + id + ')');
+    elementBtnBuyable.attr('onclick', 'App.buyStar(' + id + ')');
+    elementBtnTransfer.attr('onclick', 'App.transferStar(' + id + ', this)');
+    elementBtnExchange.attr('onclick', 'App.exchangeStars(' + id + ', this)');
+
+    if(!isForSale) {
+      elementBtnForSale.hide();
+      elementTransfer.hide();
+    }
+
+    if(!isBuyable) {
+      elementBtnBuyable.hide();
+      elementExchange.hide();
+    }
+
+    $('#cardcontainer').append(card);
+  });
+};
+
+const putStarUpForSale = async (tokenId) => {
+  const instance = await StarNotary.deployed();
+  await instance.putStarUpForSale(tokenId, 1, { from: account });
+  App.starTokenModified();
+};
+
+const buyStar = async (tokenId) => {
+  const instance = await StarNotary.deployed();
+  await instance.buyStar(tokenId, { from: account, value: 1 });
+  App.starTokenModified();
+};
+
+const transferStar = async (tokenId, transferTo) => {
+  const instance = await StarNotary.deployed();
+  await instance.transferStar(tokenId, transferTo, { from: account });
+  App.starTokenModified();
+};
+
+const exchangeStars = async (tokenId, exchangeTokenId) => {
+  const instance = await StarNotary.deployed();
+  await instance.exchangeStars(tokenId, exchangeTokenId, { from: account });
+  App.starTokenModified();
+};
 
 const App = {
   start: function () {
@@ -62,9 +147,35 @@ const App = {
     createStar();
   },
 
+  lookUptokenIdToStarInfo: function () {
+    lookUptokenIdToStarInfo();
+  },
+
+  putStarUpForSale: function (tokenId) {
+    putStarUpForSale(tokenId);
+  },
+
+  buyStar: function (tokenId) {
+    buyStar(tokenId);
+  },
+
+  transferStar: function (tokenId, element) {
+    const transferTo = $(element).parent().find( '.cardtransferto' ).val();
+    transferStar(tokenId, transferTo);
+  },
+
+  exchangeStars: function (tokenId, element) {
+    const exchangeTokenId = $(element).parent().find( '.cardexchangetoken' ).val();
+    exchangeStars(tokenId, exchangeTokenId);
+  },
+
+  starTokenModified: function () {
+    starTokenModified();
+  }
+
 };
 
-window.App = App
+window.App = App;
 
 window.addEventListener('load', function () {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -78,7 +189,7 @@ window.addEventListener('load', function () {
       ' http://truffleframework.com/tutorials/truffle-and-metamask'
     );
     // Use Mist/MetaMask's provider
-    window.web3 = new Web3(web3.currentProvider)
+    window.web3 = new Web3(web3.currentProvider);
   } else {
     console.warn(
       'No web3 detected. Falling back to http://127.0.0.1:9545.' +
@@ -90,5 +201,14 @@ window.addEventListener('load', function () {
     window.web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:9545'))
   }
 
-  App.start()
+  App.start();
+  App.starTokenModified();
+
+  /**
+   * Reload Stars on account change
+   */
+  window.ethereum.on('accountsChanged', function (accounts) {
+    App.start();
+    App.starTokenModified();
+  });
 });

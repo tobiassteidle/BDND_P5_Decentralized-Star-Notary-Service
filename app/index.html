@@ -1,27 +1,96 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>StarNotary DAPP Front End</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  <title>StarNotary DAPP Front End</title>
+
   <script src="./app.js"></script>
 </head>
 <body>
-  <h1>StarNotary Token DAPP</h1>
+<h1>StarNotary Token DAPP</h1>
 
-  <hr>
+<hr>
 
-  <br>
-    <h1>Create a Star</h1>
-    <br><label for="starName">Star Name:</label><input type="text" id="starName"></input>
-    <br><label for="starId">Star ID:</label><input type="text" id="starId"></input>
-    <br><br><button id="createStar" onclick="App.createStar()">Create Star</button>
-    <br><br>
-    <br>
-
+<div class="row">
+  <div class="col-md-6">
+    <b>Create Star</b>
+    <div class="form-group row">
+      <label for="starName" class="col-sm-3 col-form-label">Star Name:</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="starName" placeholder="Star Name">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="starId" class="col-sm-3 col-form-label">Star ID:</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="starId" placeholder="Star ID">
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="App.createStar()">Create Star</button>
+    <br />
     <span id="status"></span>
+  </div>
 
-<!--Add an input box and a button to Lookup a star by ID using tokenIdToStarInfo-->
+  <div class="col-md-6">
+    <b>Lookup Star</b>
+    <div class="form-group row">
+      <label for="lookupStarId" class="col-sm-3 col-form-label">Star ID:</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="lookupStarId" placeholder="Star ID">
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="App.lookUptokenIdToStarInfo()">Lookup Star</button>
 
-    <br>
+    <div class="form-group row">
+      <label for="lookupStarName" class="col-sm-3 col-form-label">Star Name:</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="lookupStarName" readonly>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<hr>
+
+<div class="row" id="cardcontainer">
+
+</div>
+
+
+
+<!-- Template -->
+<script id="hidden-card-template" type="text/x-custom-template">
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title cardstarname">Name</h5><h6 class="cardtokenid">Token</h6>
+      <h6 class="card-subtitle mb-2 text-muted cardstarowner">Owner</h6>
+      <p class="card-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr.</p>
+
+      <button type="button" class="btn btn-danger cardbtnforsale">Put Star for Sale</button><br /><br />
+
+      <span class="cardtransfer">
+        <button type="button" class="btn btn-warning cardbtntransfer">Transfer to</button><br />
+        <input type="text" class="col-sm-12 cardtransferto">
+      </span>
+
+      <button type="button" class="btn btn-success cardbtnbuy">Buy Star</button><br /><br />
+
+      <span class="cardexchange">
+        <button type="button" class="btn btn-info cardbtnexchange">Exchange Star</button><br />
+        <input type="text" class="col-sm-3 cardexchangetoken">
+      </span>
+    </div>
+  </div>
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>

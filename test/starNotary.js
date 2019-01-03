@@ -72,12 +72,69 @@ contract('StarNotary', async (accs) => {
     let user = accounts[0];
     let starId = 6;
     await instance.createStar('A brightly shining star', starId, {from: user});
-    let name = await instance.lookUptokenIdToStarInfo(starId);
-    assert.equal(name, 'A brightly shining star');
+    let result = await instance.lookUptokenIdToStarInfo(starId);
+    assert.equal(result[0], 'A brightly shining star');
+    assert.equal(result[1], user);
+  });
+
+  it('lookup all stars', async() => {
+    let tokenId = 7;
+    await instance.createStar('Awesome Star!', tokenId, {from: accounts[0]});
+    let tokenIds = await instance.lookUpStarInfoTokens();
+    assert.equal(tokenIds.length, 7);
+    assert.equal(tokenIds[6], 7);
+  });
+
+  it('transfer star from user1 to user2', async() => {
+    let tokenId = 8;
+    let user1 = accounts[1];
+    let user2 = accounts[2];
+
+    await instance.createStar('Awesome Star!', tokenId, {from: user1});
+
+    // should be user 1
+    let result = await instance.lookUptokenIdToStarInfo(tokenId);
+    assert.equal(result[1], user1);
+
+    await instance.transferStar(tokenId, user2, { from: user1 });
+
+    // should be user 2 after transfer
+    result = await instance.lookUptokenIdToStarInfo(tokenId);
+    assert.equal(result[1], user2);
+  });
+
+  it('exchange stars between user1 and user2', async() => {
+    let user1 = accounts[0];
+    let tokenUser1 = 9;
+
+    let user2 = accounts[1];
+    let tokenUser2 = 10;
+
+    await instance.createStar('Star User 1', tokenUser1, {from: user1});
+    await instance.createStar('Star User 2', tokenUser2, {from: user2});
+
+    // owners without exchange
+    let lookUpTokenUser1 = await instance.lookUptokenIdToStarInfo(tokenUser1);
+    let lookUpTokenUser2 = await instance.lookUptokenIdToStarInfo(tokenUser2);
+    assert.equal(lookUpTokenUser1[1], user1);
+    assert.equal(lookUpTokenUser2[1], user2);
+
+    // set star for sale
+    await instance.putStarUpForSale(tokenUser2, 1, {from: user2});
+
+    // exchange get token from user2 and execute an exchange with user1 token
+    await instance.exchangeStars(tokenUser2, tokenUser1, {from: user1});
+
+    // owners with exchange
+    lookUpTokenUser1 = await instance.lookUptokenIdToStarInfo(tokenUser1);
+    lookUpTokenUser2 = await instance.lookUptokenIdToStarInfo(tokenUser2);
+    assert.equal(lookUpTokenUser1[1], user2);
+    assert.equal(lookUpTokenUser2[1], user1);
+
   });
 
   // Write Tests for:
 
 // 1) The token name and token symbol are added properly.
 // 2) 2 users can exchange their stars.
-// 3) Stars Tokens can be transferred from one address to another.
+
