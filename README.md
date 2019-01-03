@@ -44,6 +44,6 @@ the frontend can be implemented more efficient and maintainable.
 ##### Metamask
 ![Metamask](readme/Metamask.png "Metamask")
 
-##### GUI
+##### GUI (Same state show on Account 1 and Account 2)
 ![Account 1](readme/Account1.png "Account 1")
 ![Account 2](readme/Account2.png "Account 2")
