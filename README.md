@@ -4,7 +4,7 @@ This token is deployed to **Rinkeby Testnet**.
 
 **ERC-721 Token Name**: "Tobis Notray Star Token"  
 **ERC-721 Token Symbol**: "TNST"  
-**Token/Smart Contract Address**: [0x2c8f26da031204a555212a3852bfd04ba2aff2d7](https://rinkeby.etherscan.io/address/0x2c8f26da031204a555212a3852bfd04ba2aff2d7])
+**Token/Smart Contract Address**: [0x2c8f26da031204a555212a3852bfd04ba2aff2d7](https://rinkeby.etherscan.io/address/0x2c8f26da031204a555212a3852bfd04ba2aff2d7)
 
 0x424897699C20cD1d9d8792480231ffbd1640C80B  
 
