@@ -9,7 +9,7 @@ This token is deployed to **Rinkeby Testnet**.
 0x424897699C20cD1d9d8792480231ffbd1640C80B  
 
 **Account 1**: [0x5Db0Ba6377342129ad99eE87BD7f26786fdF3629](https://rinkeby.etherscan.io/address/0x5db0ba6377342129ad99ee87bd7f26786fdf3629)  
-**Account 2**: [0x1ee629B047DdE7488FC0A271C6556AF5bC4c87d6](0x1ee629B047DdE7488FC0A271C6556AF5bC4c87d6  )
+**Account 2**: [0x1ee629B047DdE7488FC0A271C6556AF5bC4c87d6](https://rinkeby.etherscan.io/address/0x1ee629B047DdE7488FC0A271C6556AF5bC4c87d6)
 
 **Create First Star TX**: [0x946231975af68ae1cb9fe1e446d0a1eb4a0180748e46e032d7216779fa480a38](https://rinkeby.etherscan.io/tx/0x946231975af68ae1cb9fe1e446d0a1eb4a0180748e46e032d7216779fa480a38)  
 **TX from Account 1 to Account 2**: [0xcf99c0acbfaa8f429a55343468ce6b2a562c38ba1849a572ca2e72b30fe03bb9](https://rinkeby.etherscan.io/tx/0xcf99c0acbfaa8f429a55343468ce6b2a562c38ba1849a572ca2e72b30fe03bb9)
