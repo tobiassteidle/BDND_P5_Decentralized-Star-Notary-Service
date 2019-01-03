@@ -37,6 +37,8 @@ Open the DAPP in Browser [http://localhost:8080/]()
 * Currently only jQuery is used for the GUI, with a framework like VUE, React, Angular, etc. 
 the frontend can be implemented more efficient and maintainable.
 * The test cases could be extended to check for expected errors.
+* The price for buying/selling is currently fixed at 1, this should be flexible.
+* For an Exchange, the exchange should be confirmed by both users.
 
 
 #### Screenshots
