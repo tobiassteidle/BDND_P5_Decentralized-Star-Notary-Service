@@ -132,9 +132,3 @@ contract('StarNotary', async (accs) => {
     assert.equal(lookUpTokenUser2[1], user1);
 
   });
-
-  // Write Tests for:
-
-// 1) The token name and token symbol are added properly.
-// 2) 2 users can exchange their stars.
-
